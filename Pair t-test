@@ -1,0 +1,21 @@
+#An analyst at a department store wants to evaluate a recent credit card promotion. To this end, 500 cardholders were randomly selected. Half received an ad promoting a reduced interest rate on purchases made over the next three months, and half received a standard seasonal ad. Is the promotion effective to increase sales? (Data set: creditpromo.csv)
+import pandas as pd
+import scipy.stats as stats
+credit=pd.read_csv("creditpromo.csv")
+credit.head(5)
+
+id	insert	dollars
+0	148	Standard	2232.771979
+1	572	New Promotion	1403.807542
+2	973	Standard	2327.092181
+3	1096	Standard	1280.030541
+4	1541	New Promotion	1513.563200
+
+std_prmt=credit.dollars[(credit["insert"]=="Standard")]
+new_prmt=credit.dollars[(credit["insert"]=="New Promotion")]
+
+stats.ttest_ind(a=std_prmt,b=new_prmt,equal_var=False)
+
+Ttest_indResult(statistic=-2.260422726464996, pvalue=0.024226348191648994)
+
+From the above output pvalue<5%. so we will not reject the alternate which tells that promotion is effective to increase sales.
