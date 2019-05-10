@@ -1,0 +1,26 @@
+#An electronics firm is developing a new DVD player in response to customer requests. Using a prototype, the marketing team has collected focus data for different age groups viz. Under 25; 25-34; 35-44; 45-54; 55-64; 65 and above. Do you think that consumers of various ages rated the design differently? (Data set: dvdplayer.csv).
+import pandas as pd
+import scipy.stats as stats
+
+dvdplayer=pd.read_csv("dvdplayer.csv")
+dvdplayer.head()
+
+agegroup	dvdscore
+0	65 and over	38.454803
+1	55-64	17.669677
+2	65 and over	31.704307
+3	65 and over	25.924460
+4	Under 25	30.450007
+
+dvd1=dvdplayer.dvdscore[dvdplayer.agegroup=="Under 25"]
+dvd2=dvdplayer.dvdscore[dvdplayer.agegroup=="25-34"]
+dvd3=dvdplayer.dvdscore[dvdplayer.agegroup=="35-44"]
+dvd4=dvdplayer.dvdscore[dvdplayer.agegroup=="45-54"]
+dvd5=dvdplayer.dvdscore[dvdplayer.agegroup=="55-64"]
+dvd6=dvdplayer.dvdscore[dvdplayer.agegroup=="65 and over"]
+
+stats.f_oneway(dvd1,dvd2,dvd3,dvd4,dvd5,dvd6)
+
+F_onewayResult(statistic=6.992526962676518, pvalue=3.087324905679639e-05)
+
+From the above output pvalue < 5%. so we will not reject the alternate which tells that consumers of various ages rated the design differently.
