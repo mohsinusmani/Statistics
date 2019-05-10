@@ -1,0 +1,158 @@
+#A survey was conducted among 2800 customers on several demographic characteristics. Working status, sex, age, age-group, race, happiness, no. of child, marital status, educational qualifications, income group etc. had been captured for that purpose. (Data set: sample_survey.csv).
+a. Is there any relationship in between labour force status with marital status?
+b. Do you think educational qualification is somehow controlling the marital status?
+c. Is happiness is driven by earnings or marital status?
+
+smp_srvy=pd.read_csv("sample_survey.csv")
+smp_srvy.head()
+
+id	wrkstat	marital	childs	age	educ	paeduc	maeduc	speduc	degree	...	agecat	childcat	news1	news2	news3	news4	news5	car1	car2	car3
+0	1	Working full time	Divorced	2.0	60.0	12.0	12.0	12.0	NaN	High school	...	55 to 64	1-2	No	No	No	No	No	American	Japanese	Japanese
+1	2	Working part-time	Never married	0.0	27.0	17.0	20.0	NaN	NaN	Junior college	...	25 to 34	None	No	No	Yes	No	No	American	German	Japanese
+2	3	Working full time	Married	2.0	36.0	12.0	12.0	12.0	16.0	High school	...	35 to 44	1-2	No	No	No	Yes	Yes	American	American	NaN
+3	4	Working full time	Never married	0.0	21.0	13.0	NaN	12.0	NaN	High school	...	Less than 25	None	No	No	No	Yes	Yes	American	Other	NaN
+4	5	Working full time	Never married	0.0	35.0	16.0	NaN	12.0	NaN	Bachelor	...	35 to 44	None	No	No	No	No	No	American	American	Korean
+5 rows × 46 columns
+
+smp_srvy.columns
+
+Index(['id', 'wrkstat', 'marital', 'childs', 'age', 'educ', 'paeduc', 'maeduc',
+       'speduc', 'degree', 'sex', 'race', 'born', 'parborn', 'granborn',
+       'income', 'rincome', 'polviews', 'cappun', 'postlife', 'happy',
+       'hapmar', 'owngun', 'news', 'tvhours', 'howpaid', 'ethnic', 'eth1',
+       'eth2', 'eth3', 'confinan', 'conbus', 'coneduc', 'conpress', 'conmedic',
+       'contv', 'agecat', 'childcat', 'news1', 'news2', 'news3', 'news4',
+       'news5', 'car1', 'car2', 'car3'],
+      dtype='object')
+      
+smp_srvy.shape
+
+(2832, 46)
+
+t=pd.crosstab(smp_srvy.wrkstat,smp_srvy.marital,margins=True)
+t
+
+marital	Divorced	Married	Never married	Separated	Widowed	All
+wrkstat						
+Keeping house	25	200	35	13	55	328
+Other	12	16	14	4	8	54
+Retired	53	168	17	6	150	394
+School	7	9	60	2	1	79
+Temporarily not working	9	23	11	1	2	46
+Unemployed, laid off	10	13	32	0	3	58
+Working full time	295	778	392	58	44	1567
+Working part-time	35	138	102	9	20	304
+All	446	1345	663	93	283	2830
+
+stats.chi2_contingency(observed=t)
+
+(729.2421426572284,
+ 1.820339965538765e-127,
+ 40,
+ array([[5.16918728e+01, 1.55886926e+02, 7.68424028e+01, 1.07787986e+01,
+         3.28000000e+01, 3.28000000e+02],
+        [8.51024735e+00, 2.56643110e+01, 1.26508834e+01, 1.77455830e+00,
+         5.40000000e+00, 5.40000000e+01],
+        [6.20932862e+01, 1.87254417e+02, 9.23045936e+01, 1.29477032e+01,
+         3.94000000e+01, 3.94000000e+02],
+        [1.24501767e+01, 3.75459364e+01, 1.85077739e+01, 2.59611307e+00,
+         7.90000000e+00, 7.90000000e+01],
+        [7.24946996e+00, 2.18621908e+01, 1.07766784e+01, 1.51166078e+00,
+         4.60000000e+00, 4.60000000e+01],
+        [9.14063604e+00, 2.75653710e+01, 1.35879859e+01, 1.90600707e+00,
+         5.80000000e+00, 5.80000000e+01],
+        [2.46954770e+02, 7.44740283e+02, 3.67109894e+02, 5.14950530e+01,
+         1.56700000e+02, 1.56700000e+03],
+        [4.79095406e+01, 1.44480565e+02, 7.12197880e+01, 9.99010601e+00,
+         3.04000000e+01, 3.04000000e+02],
+        [4.46000000e+02, 1.34500000e+03, 6.63000000e+02, 9.30000000e+01,
+         2.83000000e+02, 2.83000000e+03]]))
+a. From the above output pvalue < 5%. so we will not reject the alternate which tells that there is relationship in between labour force status with marital status.
+
+t1=pd.crosstab(smp_srvy.degree,smp_srvy.marital,margins=True)
+t1
+
+marital	Divorced	Married	Never married	Separated	Widowed	All
+degree						
+Bachelor	58	251	129	12	28	478
+Graduate	29	123	41	3	9	205
+High school	241	686	367	58	148	1500
+Junior college	45	108	46	3	6	208
+LT High school	70	174	77	17	92	430
+All	443	1342	660	93	283	2821
+
+stats.chi2_contingency(observed=t1)
+
+(122.68449020508541,
+ 7.424404099753273e-15,
+ 25,
+ array([[  75.06345268,  227.39312301,  111.83268345,   15.75824176,
+           47.95249911,  478.        ],
+        [  32.19248493,   97.52215526,   47.9617157 ,    6.75824176,
+           20.56540234,  205.        ],
+        [ 235.55476781,  713.57674583,  350.9393832 ,   49.45054945,
+          150.4785537 , 1500.        ],
+        [  32.66359447,   98.94930876,   48.66359447,    6.85714286,
+           20.86635945,  208.        ],
+        [  67.52570011,  204.55866714,  100.60262318,   14.17582418,
+           43.1371854 ,  430.        ],
+        [ 443.        , 1342.        ,  660.        ,   93.        ,
+          283.        , 2821.        ]]))
+b. From the above output pvalue < 5%. so we will not reject the alternate which tells that educational qualification is somehow controlling the marital status.
+
+t2=pd.crosstab(smp_srvy.happy,smp_srvy.income,margins=True)
+t2
+
+income	$1000 TO 2999	$10000 - 14999	$15000 - 19999	$20000 - 24999	$25000 or more	$3000 TO 3999	$4000 TO 4999	$5000 TO 5999	$6000 TO 6999	$7000 TO 7999	$8000 TO 9999	LT $1000	All
+happy													
+Not too happy	7	39	33	40	113	9	9	6	14	12	9	11	302
+Pretty happy	20	107	119	155	888	11	13	18	13	21	30	13	1408
+Very happy	5	44	26	50	571	4	10	11	6	14	19	11	771
+All	32	190	178	245	1572	24	32	35	33	47	58	35	2481
+
+stats.chi2_contingency(observed=t2)
+
+(178.95053061216427,
+ 7.234749067043371e-21,
+ 36,
+ array([[   3.89520355,   23.12777106,   21.66706973,   29.82265216,
+          191.35187424,    2.92140266,    3.89520355,    4.26037888,
+            4.01692866,    5.72108021,    7.06005643,    4.26037888,
+          302.        ],
+        [  18.16041919,  107.82748892,  101.01733172,  139.04070939,
+          892.1305925 ,   13.62031439,   18.16041919,   19.86295848,
+           18.72793229,   26.67311568,   32.91575977,   19.86295848,
+         1408.        ],
+        [   9.94437727,   59.04474002,   55.31559855,   76.13663845,
+          488.51753325,    7.45828295,    9.94437727,   10.87666264,
+           10.25513906,   14.60580411,   18.0241838 ,   10.87666264,
+          771.        ],
+        [  32.        ,  190.        ,  178.        ,  245.        ,
+         1572.        ,   24.        ,   32.        ,   35.        ,
+           33.        ,   47.        ,   58.        ,   35.        ,
+         2481.        ]]))
+         
+t3=pd.crosstab(smp_srvy.happy,smp_srvy.marital,margins=True)
+t3
+
+marital	Divorced	Married	Never married	Separated	Widowed	All
+happy						
+Not too happy	72	71	108	30	59	340
+Pretty happy	278	684	426	49	137	1574
+Very happy	93	582	120	13	83	891
+All	443	1337	654	92	279	2805
+
+stats.chi2_contingency(observed=t3)
+
+(260.68943894182826,
+ 7.762777322980048e-47,
+ 15,
+ array([[  53.6969697 ,  162.06060606,   79.27272727,   11.15151515,
+           33.81818182,  340.        ],
+        [ 248.58538324,  750.24527629,  366.98609626,   51.62495544,
+          156.55828877, 1574.        ],
+        [ 140.71764706,  424.69411765,  207.74117647,   29.22352941,
+           88.62352941,  891.        ],
+        [ 443.        , 1337.        ,  654.        ,   92.        ,
+          279.        , 2805.        ]]))
+c. From the above output pvalue < 5%. so we will not reject the alternate which tells that happiness is driven by earnings and marital status.
